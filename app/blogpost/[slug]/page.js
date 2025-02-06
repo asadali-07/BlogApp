@@ -15,8 +15,6 @@ import rehypeSlug from 'rehype-slug'
 import OnThisPage from "@/components/onthispage"
 
 export default async function Page({ params }) {
-
-
     const filePath = path.join(process.cwd(), "public", "content", `${params.slug}.md`);
     
     if(!fs.existsSync(filePath)){ 
