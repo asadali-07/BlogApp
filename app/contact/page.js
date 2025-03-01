@@ -4,43 +4,28 @@ import React from 'react';
 const ContactPage = () => {
   return (
     <>
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-lg border border-white rounded-lg shadow-lg p-8">
-        <h2 className="text-4xl font-bold mb-8 text-center text-purple-500 animate-fadeIn">Contact Us</h2>
-        <form className="space-y-6 animate-slideUp">
-          <div className="animate-fadeIn">
-            <label className="block text-purple-500 font-semibold">Name</label>
-            <input
-              type="text"
-              className="w-full px-4 py-2 border  rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out transform hover:scale-105"
-              placeholder="Your Name"
-            />
+    <section id="contact" className="py-20">
+      <div className="container mx-auto px-6">
+        <h2 className="text-4xl font-bold mb-8 text-purple-500 text-center">Get In Touch</h2>
+        <div className="max-w-lg mx-auto p-8 flex gap-5 justify-center align-middle rounded-lg shadow-lg w-96 text-center">
+          <div className="mb-4">
+            <a href="mailto:mo.asadali007@gmail.com" className="text-blue-500 hover:underline">
+              <i className="fas fa-envelope fa-2x"></i>
+            </a>
           </div>
-          <div className="animate-fadeIn">
-            <label className="block text-purple-500 font-semibold">Email</label>
-            <input
-              type="email"
-              className="w-full px-4 py-2 border  rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out transform hover:scale-105"
-              placeholder="Your Email"
-            />
+          <div className="mb-4">
+            <a href="https://www.instagram.com/heyy.asad__/" target="_blank" rel="noopener noreferrer" className="text-pink-500 hover:underline">
+              <i className="fab fa-instagram fa-2x"></i>
+            </a>
           </div>
-          <div className="animate-fadeIn">
-            <label className="block text-purple-500 font-semibold">Message</label>
-            <textarea
-              className="w-full px-4 py-2 border  rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out transform hover:scale-105"
-              placeholder="Your Message"
-              rows="4"
-            ></textarea>
+          <div className="mb-4">
+            <a href="https://www.linkedin.com/in/mohd-asad-ali-1a7693257/" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">
+              <i className="fab fa-linkedin fa-2x"></i>
+            </a>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:bg-gradient-to-l hover:from-purple-600 hover:to-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
-          >
-            Send Message
-          </button>
-        </form>
+        </div>
       </div>
-    </div>
+    </section>
     </>
   );
 };

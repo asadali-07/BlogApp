@@ -1,5 +1,5 @@
 import React from 'react';
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import Link from 'next/link';
 import fs from "fs";
 import matter from 'gray-matter'
@@ -31,7 +31,9 @@ const Blog = async () => {
                 <p className="">By {blog.author} on {new Date(blog.date).toLocaleDateString()}</p>
               </div>
               <div className="mt-3">
-      <Link href={`/blogpost/${blog.slug}`}  className={buttonVariants({ variant: "outline" })}>Read More</Link>
+                <Button asChild>
+                <Link href={`/blogpost/${blog.slug}`} >Read More</Link>
+                </Button>
       </div>
             </div>
           ))}

@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { ModeToggle } from "./themeButton";
 import {
   Sheet,
@@ -36,12 +37,9 @@ const Navbar = () => {
         onLoaderFinished={() => setProgress(0)}
       />
       <div className="container mx-auto flex justify-around items-center">
-        <div className=" text-lg font-bold  text-purple-500">
-        <Link
-            href="/"
-          >
-           AsadBlog
-          </Link>
+        <div className=" text-lg font-bold flex justify-center items-center gap-2  text-purple-500">
+        <Image src="/blogging.png" alt="logo" width={30} height={30} />
+        <Link href="/" className="text-2xl"><i>Blog</i> </Link>
         </div>
         <div className="hidden md:flex space-x-6 items-center">
           <Link

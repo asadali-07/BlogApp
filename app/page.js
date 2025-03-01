@@ -1,6 +1,5 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { buttonVariants } from "@/components/ui/button"
 import Link from "next/link";
 import Typed from 'typed.js';
 import { useEffect, useRef } from'react';
@@ -75,7 +74,7 @@ export default function Home() {
         <li>Single User</li>
         <li>Community Access</li>
         <li>Weekly Updates</li>
-        <Button className="mt-4" variant="secondary">Choose Plan</Button>
+        <Button className="mt-4">Choose Plan</Button>
       </ul>
     </div>
     <div className="dark:border border-gray-600 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:border-2 hover:border-purple-500 flex flex-col items-center">
@@ -87,7 +86,7 @@ export default function Home() {
         <li>Single User</li>
         <li>Community Access</li>
         <li>Weekly Updates</li>
-        <Button className="mt-4" variant="secondary">Choose Plan</Button>
+        <Button className="mt-4" >Choose Plan</Button>
       </ul>
     </div>
     <div className="dark:border border-gray-600 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:border-2 hover:border-purple-500 flex flex-col items-center">
@@ -99,7 +98,7 @@ export default function Home() {
         <li>Single User</li>
         <li>Community Access</li>
         <li>Weekly Updates</li>
-        <Button className="mt-4" variant="secondary">Choose Plan</Button>
+        <Button className="mt-4" >Choose Plan</Button>
       </ul>
     </div>
   </div>
@@ -142,12 +141,14 @@ export default function Home() {
             <div key={index} className="dark:border border-gray-600 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl  hover:border-2 hover:border-purple-500 ">
               <Image src={blog.image} alt={blog.title} height={'192'} width={'400'}  className="w-full h-48 object-cover rounded-t-lg" />
               <h2 className="text-2xl font-bold mt-4 text-purple-500">{blog.title}</h2>
-              <p className="text-gray-700 mt-2">{blog.description}</p>
+              <p className=" mt-2">{blog.description}</p>
               <div className="mt-4">
-                <p className="text-gray-600">By {blog.author} on {new Date(blog.date).toLocaleDateString()}</p>
+                <p>By {blog.author} on {new Date(blog.date).toLocaleDateString()}</p>
               </div>
               <div className="mt-3">
-      <Link href={"/blog"}  className={buttonVariants({ variant: "outline" })}>Read More</Link>
+              <Button asChild>
+              <Link href={"/blog"}>Read More</Link>
+             </Button>
       </div>
             </div>
           ))}
