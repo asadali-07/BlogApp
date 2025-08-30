@@ -31,7 +31,7 @@ const AboutPage = () => {
                       alt="Blog Concept"
                       width={300}
                       height={300}
-                      className="relative mx-auto transform transition-all duration-500 hover:scale-105"
+                      className="relative  mx-auto transform transition-all duration-500 hover:scale-105"
                     />
                   </div>
                 </div>
@@ -73,7 +73,6 @@ const AboutPage = () => {
                         alt="Asad Ali" 
                         width={200} 
                         height={200}
-                        className="rounded-full object-cover"
                       />
                     </div>
                     <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-1 rounded-full text-sm font-medium shadow-lg">

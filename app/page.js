@@ -28,6 +28,7 @@ export default function Home() {
       typed.destroy();
     };
   }, []);
+
   const blogs = [
     {
       title: "Understanding React Hooks",

@@ -10,21 +10,31 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import React, { useState, useEffect } from 'react';
-import LoadingBar from 'react-top-loading-bar';
+import React, { useState, useEffect } from "react";
+import LoadingBar from "react-top-loading-bar";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
 
 const NavLink = ({ href, children }) => {
   const pathname = usePathname();
   const isActive = pathname === href;
-  
+
   return (
     <Link href={href} className="relative group">
-      <span className={`transition-colors duration-300 ${isActive ? "text-purple-500 font-semibold" : "hover:text-purple-400"}`}>
+      <span
+        className={`transition-colors duration-300 ${
+          isActive ? "text-purple-500 font-semibold" : "hover:text-purple-400"
+        }`}
+      >
         {children}
       </span>
-      <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full ${isActive ? "w-full" : ""}`}></span>
+      <span
+        className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full ${
+          isActive ? "w-full" : ""
+        }`}
+      ></span>
     </Link>
   );
 };
@@ -32,8 +42,10 @@ const NavLink = ({ href, children }) => {
 const Navbar = () => {
   const [progress, setProgress] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const { user, setUser } = useUser();
   const pathname = usePathname();
-  
+  const router = useRouter();
+
   useEffect(() => {
     setProgress(20);
     setTimeout(() => {
@@ -43,43 +55,59 @@ const Navbar = () => {
       setProgress(100);
     }, 400);
   }, [pathname]);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+ 
+
+
+  const handleLogout = async () => {
+    const res = await fetch("/api/logout", {
+      method: "POST",
+    });
+    if (res.ok) {
+      setUser(null);
+      router.push("/");
+    }
+  };
 
   return (
-    <nav className={`backdrop-blur transition-all duration-300 fixed top-0 left-0 right-0 z-50 ${
-      scrolled ? "bg-background/80 shadow-md py-2" : "bg-background/50 py-4"
-    }`}>
+    <nav
+      className={`backdrop-blur transition-all duration-300 fixed top-0 left-0 right-0 z-50 ${
+        scrolled ? "bg-background/80 shadow-md py-2" : "bg-background/50 py-4"
+      }`}
+    >
       <LoadingBar
-        color='#BC7CF9'
+        color="#BC7CF9"
         progress={progress}
         height={3}
         onLoaderFinished={() => setProgress(0)}
       />
       <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
           className="text-lg font-bold flex items-center gap-3 text-purple-500"
         >
-          <Image 
-            src="/blogging.png" 
-            alt="logo" 
-            width={32} 
-            height={32} 
-            className="transition-transform duration-500 hover:rotate-12" 
+          <Image
+            src="/blogging.png"
+            alt="logo"
+            width={32}
+            height={32}
+            className="transition-transform duration-500 hover:rotate-12"
           />
           <Link href="/" className="text-2xl font-bold">
             <span className="font-normal italic">Blog</span>
-            <span className="text-xs align-top ml-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-1.5 py-0.5 rounded-full">AI</span>
+            <span className="text-xs align-top ml-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-1.5 py-0.5 rounded-full">
+              AI
+            </span>
           </Link>
         </motion.div>
 
@@ -89,11 +117,17 @@ const Navbar = () => {
           <NavLink href="/about">About</NavLink>
           <NavLink href="/blog">Blog</NavLink>
           <NavLink href="/contact">Contact</NavLink>
-          
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <NavLink href="/create-blog">Create Blog</NavLink>
+          {!user && <NavLink href="/signin">SignIn</NavLink>}
+          {user && (
+            <button
+              onClick={handleLogout}
+              className="text-gray-700 dark:text-gray-300 hover:text-red-500 transition-colors duration-300"
+            >
+              Logout
+            </button>
+          )}
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <ModeToggle />
           </motion.div>
         </div>
@@ -107,7 +141,7 @@ const Navbar = () => {
           >
             <ModeToggle />
           </motion.div>
-          
+
           <Sheet>
             <SheetTrigger className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
               <svg
@@ -129,7 +163,12 @@ const Navbar = () => {
               <SheetHeader className="mb-6">
                 <SheetTitle className="text-center text-2xl text-purple-500">
                   <div className="flex items-center justify-center gap-2">
-                    <Image src="/blogging.png" alt="logo" width={28} height={28} />
+                    <Image
+                      src="/blogging.png"
+                      alt="logo"
+                      width={28}
+                      height={28}
+                    />
                     <span className="italic">Blog</span>
                   </div>
                 </SheetTitle>
@@ -140,21 +179,40 @@ const Navbar = () => {
                       { href: "/about", label: "About" },
                       { href: "/blog", label: "Blog" },
                       { href: "/contact", label: "Contact" },
+                      { href: "/create-blog", label: "Create Blog" },
                     ].map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
                         className={`text-lg transition-all duration-300 hover:text-purple-500 ${
-                          pathname === link.href ? "text-purple-500 font-medium" : ""
+                          pathname === link.href
+                            ? "text-purple-500 font-medium"
+                            : ""
                         }`}
                       >
                         {link.label}
                       </Link>
                     ))}
+                    {!user && (
+                      <Link
+                        href="/signin"
+                        className="text-lg transition-all duration-300 hover:text-purple-500"
+                      >
+                        SignIn
+                      </Link>
+                    )}
+                    {user && (
+                      <button
+                        onClick={handleLogout}
+                        className="text-gray-700 dark:text-gray-300 hover:text-red-500 transition-colors duration-300"
+                      >
+                        Logout
+                      </button>
+                    )}
                   </div>
                 </SheetDescription>
               </SheetHeader>
-              
+
               <div className="absolute bottom-8 left-0 right-0 flex justify-center">
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   © {new Date().getFullYear()} AI Blog

@@ -1,8 +1,9 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import  {ThemeProvider}  from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/Footer";
+import { UserProvider } from "@/context/UserContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,23 +18,27 @@ const geistMono = localFont({
 
 export const metadata = {
   title: "Blog App",
-  description: "A blog app built with Next.js in which you can read the blogs of software developers",
+  description:
+    "A blog app built with Next.js in which you can read the blogs of software developers",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en " className="scroll-p-20 scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-           <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-         <Navbar/>
-        {children}
-        <Footer/>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <UserProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </UserProvider>
         </ThemeProvider>
       </body>
     </html>

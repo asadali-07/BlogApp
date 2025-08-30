@@ -1,6 +1,3 @@
-import fs from "fs"
-import path from "path";
-import matter from "gray-matter"
 import { notFound } from "next/navigation"
 import rehypeDocument from 'rehype-document'
 import rehypeFormat from 'rehype-format'
@@ -18,23 +15,21 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import SubscribeForm from "@/components/subscribe-form";
-
-
+import { connectDB } from "@/lib/db"
+import Blog from "@/app/models/blog.model"
 
 export default async function Page({ params }) {
-    const filePath = path.join(process.cwd(), "public", "content", `${params.slug}.md`);
-    
-    if(!fs.existsSync(filePath)){ 
-        return notFound() 
-    } 
+    await connectDB();
+    const blogPost = await Blog.findOne({ slug: params.slug }).populate('author', 'name');
 
-    const fileContent = fs.readFileSync(filePath, "utf-8")
-    const {content, data} = matter(fileContent)
+    if (!blogPost) {
+        return notFound();
+    }
 
     const processor = unified()
         .use(remarkParse)
         .use(remarkRehype)
-        .use(rehypeDocument, {title: data.title || '👋🌍'})
+        .use(rehypeDocument, {title: blogPost.title || '👋🌍'})
         .use(rehypeFormat)
         .use(rehypeStringify) 
         .use(rehypeSlug)
@@ -49,8 +44,8 @@ export default async function Page({ params }) {
               ],
         })
 
-    const htmlContent = (await processor.process(content)).toString()
-    const formattedDate = new Date(data.date).toLocaleDateString('en-US', {
+    const htmlContent = (await processor.process(blogPost.content)).toString()
+    const formattedDate = new Date(blogPost.updatedAt).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
@@ -86,11 +81,11 @@ export default async function Page({ params }) {
                     
                     {/* Article header */}
                     <header className="mb-10">
-                        {data.image && (
+                        {blogPost.image && (
                             <div className="relative w-full h-[300px] sm:h-[400px] mb-8 rounded-2xl overflow-hidden shadow-xl">
                                 <Image 
-                                    src={data.image} 
-                                    alt={data.title} 
+                                    src={blogPost.image} 
+                                    alt={blogPost.title} 
                                     fill 
                                     className="object-cover"
                                     priority
@@ -100,7 +95,7 @@ export default async function Page({ params }) {
                         )}
                         
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
-                            {data.title}
+                            {blogPost.title}
                         </h1>
                         
                         <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mb-6"></div>
@@ -114,7 +109,7 @@ export default async function Page({ params }) {
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">Author</p>
-                                    <p className="font-medium text-purple-600 dark:text-purple-400">{data.author}</p>
+                                    <p className="font-medium text-purple-600 dark:text-purple-400">{blogPost.author.name}</p>
                                 </div>
                             </div>
                             
@@ -132,7 +127,7 @@ export default async function Page({ params }) {
                         </div>
                         
                         <div className="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 p-4 rounded-r-lg">
-                            <p className="italic text-gray-700 dark:text-gray-300">{data.description}</p>
+                            <p className="italic text-gray-700 dark:text-gray-300">{blogPost.description}</p>
                         </div>
                     </header>
                     
@@ -172,16 +167,16 @@ export default async function Page({ params }) {
                                     <div>
                                         <h3 className="text-lg font-semibold mb-3">Share this article</h3>
                                         <ShareButtons 
-                                            title={data.title} 
+                                            title={blogPost.title} 
                                             url={articleUrl}
                                         />
                                     </div>
                                     
-                                    {data.tags && data.tags.length > 0 && (
+                                    {blogPost.tags && blogPost.tags.length > 0 && (
                                         <div>
                                             <h3 className="text-lg font-semibold mb-3">Tags</h3>
                                             <div className="flex flex-wrap gap-2">
-                                                {data.tags.map((tag, index) => (
+                                                {blogPost.tags.map((tag, index) => (
                                                     <span key={index} className="bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 px-3 py-1 rounded-full text-sm">
                                                         {tag}
                                                     </span>
