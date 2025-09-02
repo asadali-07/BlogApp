@@ -16,6 +16,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import SubscribeForm from "@/components/subscribe-form";
 import { connectDB } from "@/lib/db"
+import User from "@/app/models/user.model"
 import Blog from "@/app/models/blog.model"
 
 export default async function Page({ params }) {
